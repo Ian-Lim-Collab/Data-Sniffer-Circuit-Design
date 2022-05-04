@@ -1,0 +1,5 @@
+IO_LOC "DataIn" 16
+IO_LOC "CLK" 14
+IO_LOC "Reset" 13
+IO_LOC "DataOut" 17
+IO_LOC "RecordFlag" 18

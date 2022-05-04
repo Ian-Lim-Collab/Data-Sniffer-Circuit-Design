@@ -1,0 +1,153 @@
+//
+//Written by GowinSynthesis
+//Product Version "GowinSynthesis V1.9.8.05"
+//Tue May 03 14:14:23 2022
+
+//Source file index table:
+//file0 "\D:/Documents/University\ of\ Bath/Education/Year\ 1/Semester\ 2/EE10169-Digital\ Electronics/Coursework/Trial_1/src/Trial_1.sv"
+`timescale 100 ps/100 ps
+module DataSniffer (
+  DataIn,
+  CLK,
+  Reset,
+  DataOut,
+  RecordFlag
+)
+;
+input DataIn;
+input CLK;
+input Reset;
+output DataOut;
+output RecordFlag;
+wire DataIn_d;
+wire CLK_d;
+wire Reset_d;
+wire n81_4;
+wire RecordFlag_d;
+wire intermediate1;
+wire n9_5;
+wire intermediate2;
+wire intermediate3;
+wire DataOut_d;
+wire n27_6;
+wire [1:0] nextstate;
+wire [2:0] state;
+wire VCC;
+wire GND;
+  IBUF DataIn_ibuf (
+    .O(DataIn_d),
+    .I(DataIn) 
+);
+  IBUF CLK_ibuf (
+    .O(CLK_d),
+    .I(CLK) 
+);
+  IBUF Reset_ibuf (
+    .O(Reset_d),
+    .I(Reset) 
+);
+  OBUF DataOut_obuf (
+    .O(DataOut),
+    .I(DataOut_d) 
+);
+  OBUF RecordFlag_obuf (
+    .O(RecordFlag),
+    .I(RecordFlag_d) 
+);
+  LUT4 n81_s0 (
+    .F(n81_4),
+    .I0(state[0]),
+    .I1(Reset_d),
+    .I2(state[2]),
+    .I3(state[1]) 
+);
+defparam n81_s0.INIT=16'h0230;
+  LUT3 RecordFlag_d_s (
+    .F(RecordFlag_d),
+    .I0(state[0]),
+    .I1(state[2]),
+    .I2(state[1]) 
+);
+defparam RecordFlag_d_s.INIT=8'h2C;
+  LUT4 intermediate1_s0 (
+    .F(intermediate1),
+    .I0(state[0]),
+    .I1(state[2]),
+    .I2(state[1]),
+    .I3(DataIn_d) 
+);
+defparam intermediate1_s0.INIT=16'h2C00;
+  LUT4 n9_s2 (
+    .F(n9_5),
+    .I0(Reset_d),
+    .I1(state[0]),
+    .I2(state[1]),
+    .I3(state[2]) 
+);
+defparam n9_s2.INIT=16'hFEBF;
+  LUT4 nextstate_1_s5 (
+    .F(nextstate[1]),
+    .I0(state[0]),
+    .I1(state[1]),
+    .I2(state[2]),
+    .I3(DataIn_d) 
+);
+defparam nextstate_1_s5.INIT=16'h3C02;
+  LUT4 nextstate_0_s5 (
+    .F(nextstate[0]),
+    .I0(state[0]),
+    .I1(DataIn_d),
+    .I2(state[1]),
+    .I3(state[2]) 
+);
+defparam nextstate_0_s5.INIT=16'h0DCC;
+  DFFR state_2_s0 (
+    .Q(state[2]),
+    .D(n27_6),
+    .CLK(CLK_d),
+    .RESET(n9_5) 
+);
+  DFFR state_1_s0 (
+    .Q(state[1]),
+    .D(nextstate[1]),
+    .CLK(CLK_d),
+    .RESET(Reset_d) 
+);
+  DFFR state_0_s0 (
+    .Q(state[0]),
+    .D(nextstate[0]),
+    .CLK(CLK_d),
+    .RESET(Reset_d) 
+);
+  DFFE intermediate2_s0 (
+    .Q(intermediate2),
+    .D(intermediate1),
+    .CLK(CLK_d),
+    .CE(n81_4) 
+);
+  DFFE intermediate3_s0 (
+    .Q(intermediate3),
+    .D(intermediate2),
+    .CLK(CLK_d),
+    .CE(n81_4) 
+);
+  DFFE DataOut_s2 (
+    .Q(DataOut_d),
+    .D(intermediate3),
+    .CLK(CLK_d),
+    .CE(n81_4) 
+);
+  INV n27_s2 (
+    .O(n27_6),
+    .I(DataIn_d) 
+);
+  VCC VCC_cZ (
+    .V(VCC)
+);
+  GND GND_cZ (
+    .G(GND)
+);
+  GSR GSR (
+    .GSRI(VCC) 
+);
+endmodule /* DataSniffer */
